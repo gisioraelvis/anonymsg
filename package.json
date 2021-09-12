@@ -3,9 +3,16 @@
   "version": "1.0.0",
   "description": "Send and receive messages anonymously",
   "main": "server.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "devserver": "nodemon server/app",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run devserver\" \"npm run client\"",
+    "import-data": "node server/seedData/seeder",
+    "destroy-data": "node server/seedData/seeder -d",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "anonymouse",
