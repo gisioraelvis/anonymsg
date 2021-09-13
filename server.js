@@ -5,8 +5,8 @@ import colors from "colors";
 import morgan from "morgan";
 import connectDB from "./configs/db.js";
 
-// import messageRouter from "./routes/messageRoutes.js";
-// import userRouter from "./routes/userRoutes.js";
+import userRouter from "./routes/user.routes.js";
+import messageRouter from "./routes/message.routes.js";
 
 import { notFound, errorHandler } from "./middlewares/errorHandlers.js";
 import { apiDetails } from "./apiDetails.js";
@@ -21,8 +21,8 @@ if (process.env.NODE_ENV === "development") {
 
 app.use(express.json());
 
-// app.use("/api/messages", messageRouter);
-// app.use("/api/users", userRouter);
+app.use("/api/user", userRouter);
+app.use("/api/message", messageRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
@@ -31,7 +31,7 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
   );
 } else {
-  app.get("/", (req, res) => {
+  app.get("/api", (req, res) => {
     res.json(apiDetails);
   });
 }
