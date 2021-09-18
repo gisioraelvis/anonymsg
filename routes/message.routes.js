@@ -3,6 +3,6 @@ import { messageController } from "../controllers/message.controller.js";
 
 const router = express.Router();
 
-router.route("/:user").get(messageController);
+router.route("/").post(messageController);
 
 export default router;

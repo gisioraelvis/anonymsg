@@ -22,16 +22,18 @@ export const register = async (req, res) => {
   const emailExists = await User.findOne({ email });
   if (emailExists) {
     res.status(409).json({
-      message: "Email already exists",
+      errorMessage: "Email already exists",
     });
   }
-
   try {
+    const encryptedPassword = await bcrypt.hash(password, 10);
+
     const user = await User.create({
       username,
       email,
-      password,
+      password: encryptedPassword,
     });
+
     res.json({
       _id: user._id,
       userName: user.username,
@@ -39,7 +41,7 @@ export const register = async (req, res) => {
       token: generateJWT(user),
     });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(400).json({ errorMessage: error.message });
   }
 };
 
@@ -51,19 +53,33 @@ export const register = async (req, res) => {
  */
 export const login = async (req, res) => {
   const { username, password } = req.body;
-  const user = await User.findOne({ username });
-  const matchPassword = await bcrypt.compare(password, user.password);
 
-  if (user && matchPassword) {
-    res.json({
-      _id: user._id,
-      userName: user.username,
-      email: user.email,
-      token: generateJWT(user),
-    });
-  } else {
+  try {
+    const user = await User.findOne({ username });
+    if (!user) {
+      res.status(401).json({
+        errorMessage: "Username doesn't exist",
+      });
+    }
+
+    const matchPassword = await bcrypt.compare(password, user.password);
+    if (!matchPassword) {
+      res.status(401).json({
+        errorMessage: "Password is incorrect",
+      });
+    }
+
+    if (user && matchPassword) {
+      res.json({
+        _id: user._id,
+        userName: user.username,
+        email: user.email,
+        token: generateJWT(user),
+      });
+    }
+  } catch (error) {
     res.status(401).json({
-      message: "Invalid username or password",
+      errorMessage: error.message,
     });
   }
 };
@@ -76,7 +92,8 @@ export const login = async (req, res) => {
 export const getUserProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
-    const messages = await Message.findById({ _id: user._id });
+    const messages = await Message.findById(user._id);
+    console.log(messages);
     res.json({
       _id: user._id,
       userName: user.username,
@@ -85,7 +102,7 @@ export const getUserProfile = async (req, res) => {
     });
   } else {
     res.status(401).json({
-      message: "Unauthorized",
+      errorMessage: "Unauthorized",
     });
   }
 };
@@ -96,7 +113,8 @@ export const getUserProfile = async (req, res) => {
  * @access Private
  */
 export const updateUserProfile = async (req, res) => {
-  const user = await User.findById(req.user._id);
+  const { username } = req.body;
+  const user = await User.findOne({ username });
   if (user) {
     user.username = req.body.username || user.username;
     user.email = req.body.email || user.email;

@@ -24,7 +24,7 @@ if (process.env.NODE_ENV === "development") {
 
 app.use(express.json());
 
-app.use("/api/user", userRouter);
+app.use("/api/users", userRouter);
 app.use("/api/message", messageRouter);
 
 if (process.env.NODE_ENV === "production") {
