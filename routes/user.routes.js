@@ -10,8 +10,8 @@ import authenticate from "../middlewares/userAuth.js";
 const router = express.Router();
 
 router.route("/login").get(login);
-router.route("/signup").get(register);
+router.route("/signup").post(register);
 router.route("/dashboard").get(authenticate, getUserProfile);
-router.route("/update").get(authenticate, updateUserProfile);
+router.route("/update").put(authenticate, updateUserProfile);
 
 export default router;

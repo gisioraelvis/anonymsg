@@ -5,11 +5,14 @@ import colors from "colors";
 import morgan from "morgan";
 import connectDB from "./configs/db.js";
 
+//Api endpoints
+import { apiDetails } from "./apiDetails.js";
+
+//routes
 import userRouter from "./routes/user.routes.js";
 import messageRouter from "./routes/message.routes.js";
 
 import { notFound, errorHandler } from "./middlewares/errorHandlers.js";
-import { apiDetails } from "./apiDetails.js";
 
 dotenv.config();
 const app = express();
