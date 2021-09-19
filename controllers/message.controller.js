@@ -9,23 +9,30 @@ import User from "../models/user.model.js";
  */
 export const messageController = async (req, res) => {
   const { username } = req.query;
-  const { message } = req.body;
+  const message = req.body;
 
-  const userExists = await User.findOne({ username });
-  if (!userExists) {
+  const user = await User.findOne({ username });
+  if (!user) {
     res.status(404).json({ errorMessage: "Username not found" });
   }
+  
+  //search by user id on Message model
+  let userMessages = await Message.findOne({ user: user._id });
 
-  let userMessages = await Message.findById(userExists._id);
+  /**
+   * if userMessages is null then create new message object and add to user object in db
+   * else add to existing message array in db
+   */
+
   if (!userMessages) {
     userMessages = new Message({
-      user: userExists._id,
-      message: [{ message }],
+      user: user._id,
+      messages: [message],
     });
     userMessages.save();
-    res.status(200).json("Message sent successfully");
+    res.status(200).json("New message sent successfully");
   } else {
-    userMessages.message.push({ message });
+    userMessages.messages.push(message);
     userMessages.save();
     res.status(200).json("Message sent successfully");
   }

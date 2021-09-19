@@ -92,8 +92,7 @@ export const login = async (req, res) => {
 export const getUserProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
-    const messages = await Message.findById(user._id);
-    console.log(messages);
+    const messages = await Message.findOne({ user: user._id });
     res.json({
       _id: user._id,
       userName: user.username,
