@@ -2,6 +2,10 @@ import User from "../models/user.model.js";
 import Message from "../models/message.model.js";
 import generateJWT from "../utils/generateJWT.js";
 import bcrypt from "bcryptjs";
+import {
+  registrationValidation,
+  loginValidation,
+} from "../utils/validation.js";
 
 /**
  * @desc   Register a new user
@@ -10,6 +14,9 @@ import bcrypt from "bcryptjs";
  * @param  {username, email, password}
  */
 export const register = async (req, res) => {
+  //validate the user input
+  const { error } = registrationValidation(req.body);
+  if (error) return res.status(422).json({ message: error.details[0].message });
   const { username, email, password } = req.body;
 
   const userExists = await User.findOne({ username });
@@ -22,7 +29,7 @@ export const register = async (req, res) => {
   const emailExists = await User.findOne({ email });
   if (emailExists) {
     res.status(409).json({
-      errorMessage: "Email already exists",
+      message: "Email already exists",
     });
   }
   try {
@@ -41,7 +48,7 @@ export const register = async (req, res) => {
       token: generateJWT(user),
     });
   } catch (error) {
-    res.status(400).json({ errorMessage: error.message });
+    res.status(400).json({ message: error.message });
   }
 };
 
@@ -52,34 +59,38 @@ export const register = async (req, res) => {
  * @param -{username, password}
  */
 export const login = async (req, res) => {
+  //validate the user input
+  const { error } = loginValidation(req.body);
+  if (error) return res.status(422).send({ message: error.details[0].message });
+
   const { username, password } = req.body;
 
   try {
     const user = await User.findOne({ username });
     if (!user) {
       res.status(401).json({
-        errorMessage: "Username doesn't exist",
+        message: "Username doesn't exist",
       });
     }
 
     const matchPassword = await bcrypt.compare(password, user.password);
     if (!matchPassword) {
       res.status(401).json({
-        errorMessage: "Password is incorrect",
+        message: "Password is incorrect",
       });
     }
 
     if (user && matchPassword) {
       res.json({
         _id: user._id,
-        userName: user.username,
+        username: user.username,
         email: user.email,
         token: generateJWT(user),
       });
     }
   } catch (error) {
     res.status(401).json({
-      errorMessage: error.message,
+      message: error.message,
     });
   }
 };
@@ -95,13 +106,13 @@ export const getUserProfile = async (req, res) => {
     const messages = await Message.findOne({ user: user._id });
     res.json({
       _id: user._id,
-      userName: user.username,
+      username: user.username,
       email: user.email,
       messages,
     });
   } else {
     res.status(401).json({
-      errorMessage: "Unauthorized",
+      message: "Unauthorized",
     });
   }
 };
