@@ -25,7 +25,7 @@ if (process.env.NODE_ENV === "development") {
 app.use(express.json());
 
 app.use("/api/users", userRouter);
-app.use("/api/message", messageRouter);
+app.use("/api/send", messageRouter);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
