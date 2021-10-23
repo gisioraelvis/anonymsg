@@ -1,6 +1,7 @@
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
+import cors from "cors";
 import colors from "colors";
 import morgan from "morgan";
 import connectDB from "./configs/db.js";
@@ -17,6 +18,8 @@ import { notFound, errorHandler } from "./middlewares/errorHandlers.js";
 dotenv.config();
 const app = express();
 connectDB();
+
+app.use(cors({ origin: "*" }));
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));

@@ -13,12 +13,14 @@ export const messageController = async (req, res) => {
   const { error } = messageValidation(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
+  //Body with username and message
   const message = req.body;
   const username = message.username;
 
   const user = await User.findOne({ username });
   if (!user) {
     res.status(404).json({ message: "Username not found" });
+    return;
   }
 
   //search by user id on Message model
@@ -36,9 +38,12 @@ export const messageController = async (req, res) => {
     });
     userMessages.save();
     res.status(200).json({ message: "New message sent successfully" });
+    return;
   } else {
     userMessages.messages.push(message);
     userMessages.save();
     res.status(200).json({ message: "Message sent successfully" });
+    return;
   }
+  return;
 };

@@ -24,6 +24,7 @@ export const register = async (req, res) => {
     res.status(409).json({
       message: "Username already exists",
     });
+    return;
   }
 
   const emailExists = await User.findOne({ email });
@@ -31,6 +32,7 @@ export const register = async (req, res) => {
     res.status(409).json({
       message: "Email already exists",
     });
+    return;
   }
   try {
     const encryptedPassword = await bcrypt.hash(password, 10);
@@ -41,14 +43,17 @@ export const register = async (req, res) => {
       password: encryptedPassword,
     });
 
-    res.json({
+    res.status(201).json({
       _id: user._id,
       userName: user.username,
       email: user.email,
+      message: "User created",
       token: generateJWT(user),
     });
+    return;
   } catch (error) {
     res.status(400).json({ message: error.message });
+    return;
   }
 };
 
@@ -71,6 +76,7 @@ export const login = async (req, res) => {
       res.status(401).json({
         message: "Username doesn't exist",
       });
+      return;
     }
 
     const matchPassword = await bcrypt.compare(password, user.password);
@@ -78,20 +84,23 @@ export const login = async (req, res) => {
       res.status(401).json({
         message: "Password is incorrect",
       });
+      return;
     }
 
     if (user && matchPassword) {
-      res.json({
+      res.status(200).json({
         _id: user._id,
         username: user.username,
         email: user.email,
         token: generateJWT(user),
       });
+      return;
     }
   } catch (error) {
     res.status(401).json({
       message: error.message,
     });
+    return;
   }
 };
 
@@ -110,10 +119,12 @@ export const getUserProfile = async (req, res) => {
       email: user.email,
       messages,
     });
+    return;
   } else {
     res.status(401).json({
       message: "Unauthorized",
     });
+    return;
   }
 };
 
@@ -139,7 +150,9 @@ export const updateUserProfile = async (req, res) => {
       email: updatedUser.email,
       token: generateJWT(updatedUser),
     });
+    return;
   } else {
     res.status(400).json({ message: "User not found" });
+    return;
   }
 };
