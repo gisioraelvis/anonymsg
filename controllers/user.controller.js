@@ -112,12 +112,12 @@ export const login = async (req, res) => {
 export const getUserProfile = async (req, res) => {
   const user = await User.findById(req.user._id);
   if (user) {
-    const messages = await Message.findOne({ user: user._id });
+    const usermessages = await Message.findOne({ user: user._id });
     res.json({
       _id: user._id,
       username: user.username,
       email: user.email,
-      messages,
+      usermessages,
     });
     return;
   } else {
@@ -134,7 +134,7 @@ export const getUserProfile = async (req, res) => {
  * @access Private
  */
 export const updateUserProfile = async (req, res) => {
-  const { username } = req.body;
+  const { username } = req.user;
   const user = await User.findOne({ username });
   if (user) {
     user.username = req.body.username || user.username;
@@ -144,7 +144,7 @@ export const updateUserProfile = async (req, res) => {
     }
 
     const updatedUser = await user.save();
-    res.json({
+    res.status(201).json({
       _id: updatedUser._id,
       userName: updatedUser.username,
       email: updatedUser.email,
