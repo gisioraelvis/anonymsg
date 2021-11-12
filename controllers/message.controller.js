@@ -14,8 +14,8 @@ export const messageController = async (req, res) => {
   if (error) return res.status(400).send(error.details[0].message);
 
   //Body with username and message
-  const message = req.body;
-  const username = message.username;
+  const { username, message } = req.body;
+  console.log(req.body);
 
   const user = await User.findOne({ username });
   if (!user) {
@@ -28,22 +28,21 @@ export const messageController = async (req, res) => {
 
   /**
    * if userMessages is null then create new message object and add to user object in db
-   * else add to existing message array in db
+   * else add to existing messages array in db
    */
 
   if (!userMessages) {
     userMessages = new Message({
       user: user._id,
-      messages: [message],
+      messages: [{ message }],
     });
     userMessages.save();
     res.status(200).json({ message: "New message sent successfully" });
     return;
   } else {
-    userMessages.messages.push(message);
+    userMessages.messages.push({ message });
     userMessages.save();
     res.status(200).json({ message: "Message sent successfully" });
     return;
   }
-  return;
 };

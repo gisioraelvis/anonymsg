@@ -8,6 +8,24 @@ import {
 } from "../utils/validation.js";
 
 /**
+ * @desc   Check if a username exist
+ * @route  GET /api/users/:username
+ * @access Public
+ * @param  {username}
+ */
+export const getUser = async (req, res) => {
+  const { username } = req.query;
+  const user = await User.findOne({ username });
+
+  if (user) {
+    res.status(200).json({ id: user._id, username: user.username });
+    return;
+  } else {
+    res.status(404).json({ message: "Username doesn't exist" });
+    return;
+  }
+};
+/**
  * @desc   Register a new user
  * @route  POST /api/users/signup
  * @access Public
