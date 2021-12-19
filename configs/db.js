@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import chalk from "chalk";
 
 const connectDB = async () => {
   try {
@@ -9,11 +10,14 @@ const connectDB = async () => {
     });
 
     console.log(
-      `MongoDB connected: ${conn.connection.host}:${conn.connection.port}`.green
-        .underline.bold
+      chalk.green.underline.bold(
+        `MongoDB connected: ${conn.connection.host}:${conn.connection.port}`
+      )
     );
   } catch (error) {
-    console.error(`Error connectingDB: ${error.message}`.red.underline.bold);
+    console.error(
+      chalk.red.underline.bold(`Error connectingDB: ${error.message}`)
+    );
     process.exit(1);
   }
 };
