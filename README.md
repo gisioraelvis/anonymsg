@@ -18,7 +18,7 @@ You can have fun with it or use professionally to get unbiased feedback
 ## 🛠 Stack Used
 
 - Reactjs
-- Material-UI
+- Styled components
 - Node.js
 - Express
 - MongoDB
@@ -27,4 +27,4 @@ You can have fun with it or use professionally to get unbiased feedback
 
 ## 🌏 Link to Website
 
-[anonymsg](https://anonymsg.herokuapp.com/)
+[anonymsg](https://anonymsgs.herokuapp.com/)
