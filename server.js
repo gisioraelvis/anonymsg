@@ -31,12 +31,10 @@ app.use("/api/users", userRouter);
 app.use("/api/send", messageRouter);
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(path.resolve(), "/anonymsg-client/build")));
+  app.use(express.static(path.join(path.resolve(), "/client/build")));
 
   app.get("*", (req, res) =>
-    res.sendFile(
-      path.resolve(path.resolve(), "anonymsg-client", "build", "index.html")
-    )
+    res.sendFile(path.resolve(path.resolve(), "client", "build", "index.html"))
   );
 } else {
   app.get("/api", (req, res) => {

@@ -1,0 +1,44 @@
+.App {
+  --primary-color: #fff;
+  --secondary-color: #0fa958;
+  --tertiary-color: #007acc;
+  --primary-background: #1e1e1e;
+  --secondary-background: #252526;
+  --tertiary-background: #454e56;
+  --warning-color: rgb(255, 230, 0);
+  --success-color: rgb(0, 255, 0);
+  --error-color: rgb(255, 0, 0);
+
+  text-align: center;
+  width: 100%;
+  min-height: calc(100vh - 70px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+a {
+  color: #007acc;
+  text-decoration: none;
+}
+
+.overlay {
+  position: fixed;
+  background-color: #000000a1;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+}
+
+.success {
+  color: var(--success-color);
+}
+.warning {
+  color: var(--warning-color);
+}
+.error {
+  color: var(--error-color);
+}
+
+
