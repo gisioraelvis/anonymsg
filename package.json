@@ -4,6 +4,9 @@
   "description": "Send and receive messages anonymously",
   "main": "server.js",
   "type": "module",
+  "engines": {
+    "node": "16.x"
+  },
   "scripts": {
     "start": "node server.js",
     "client": "npm start --prefix client",
