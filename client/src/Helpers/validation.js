@@ -10,7 +10,7 @@ const validateEmail = (email) => {
 };
 
 const validatePassword = (password) => {
-  return password.length >= 3;
+  return password.length >= 6;
 };
 
 export { validatePassword, validateUserName, validateEmail };
