@@ -33,7 +33,7 @@ const SocialShare = ({ username }) => {
         <a
           target="_blank"
           rel="noopener noreferrer"
-          href={`http://twitter.com/share?text=@${text}&url=${shareUrl}/&hashtags=AnonyMsg,anonymous,messaging`}
+          href={`http://twitter.com/share?text=${text}&url=${shareUrl}/&hashtags=AnonyMsg,anonymous,messaging`}
         >
           <i className="fab fa-twitter"></i>
         </a>
