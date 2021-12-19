@@ -2,7 +2,7 @@ import express from "express";
 import path from "path";
 import dotenv from "dotenv";
 import cors from "cors";
-import colors from "colors";
+import chalk from "chalk";
 import morgan from "morgan";
 import connectDB from "./configs/db.js";
 
@@ -31,10 +31,12 @@ app.use("/api/users", userRouter);
 app.use("/api/send", messageRouter);
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "/client/build")));
+  app.use(express.static(path.join(path.resolve(), "/anonymsg-client/build")));
 
   app.get("*", (req, res) =>
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
+    res.sendFile(
+      path.resolve(path.resolve(), "anonymsg-client", "build", "index.html")
+    )
   );
 } else {
   app.get("/api", (req, res) => {
@@ -48,7 +50,12 @@ app.use(errorHandler);
 const PORT = process.env.PORT;
 app.listen(PORT, () => {
   console.log(
-    `Server running in ${process.env.NODE_ENV} mode on localhost:${PORT}`.yellow
-      .bold.underline
+    chalk.yellow.bold.underline(
+      `Server running in ${process.env.NODE_ENV} mode on localhost:${PORT}`
+    )
   );
+  // console.log(
+  //   `Server running in ${process.env.NODE_ENV} mode on localhost:${PORT}`.yellow
+  //     .bold.underline
+  // );
 });
