@@ -27,4 +27,4 @@ You can have fun with it or use professionally to get unbiased feedback
 
 ## 🌏 Link to Website
 
-[anonymsg](https://anonymsgs.herokuapp.com/)
+[anonymsg](https://anonymsg-v1.herokuapp.com/)
